@@ -8,5 +8,5 @@
 __webpack_public_path__ = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/jupyter_scisheets_widget/';
 
 // Export widget models and views, and the npm package version number.
-module.exports = require('./scisheets_widget_render.js');
+module.exports = require('./scisheets_widget.js');
 module.exports['version'] = require('../package.json').version;

@@ -1,3 +1,4 @@
+import ast
 import json
 import StringIO
 import ipywidgets as widgets
@@ -15,6 +16,8 @@ class SciSheetTable(widgets.DOMWidget):
     _view_module = Unicode('jupyter_scisheets_widget').tag(sync=True)
     _model_module = Unicode('jupyter_scisheets_widget').tag(sync=True)
     _model_data = Unicode().tag(sync=True)
+    _model_header = Unicode().tag(sync=True)
+
 
     @default('layout')
     def _default_layout(self):
@@ -22,7 +25,10 @@ class SciSheetTable(widgets.DOMWidget):
 
     def load_df(self, df):
         if type(df) == pd.core.frame.DataFrame:
-            self._model_data = df.to_json(orient='split')
+            model_data = df.to_json(orient='split')
+            model_data = ast.literal_eval(model_data)
+            self._model_data = json.dumps(model_data['data'])
+            self._model_header = json.dumps(model_data['columns'])  
         else:
             print('Please enter a pandas dataframe')
 

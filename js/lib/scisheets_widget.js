@@ -26,8 +26,19 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         this.$table = $('<div />')
             .attr('id', 'table_' + (table_id++))
             .appendTo(this.$el);
+
+        // Get the model's value (JSON);
+        var json_model = this.model.get('_model_data');
+        var json_header = this.model.get('_model_header');
+
+        // Get the model's JSON string and parse it
+        var datamod = JSON.parse(json_model);
+        var headermod = JSON.parse(json_header);
+
         // Create the Handsontable table.
         this.$table.handsontable({
+            data: datamod,
+            colHeaders: headermod
         });
             
     },
@@ -36,21 +47,26 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         // PYTHON --> JS UPDATE.
     
         // Get the model's value (JSON)
-        var json = this.model.get('_model_data');
-        
-        // Get the model's JSON string, and parse it.
-        var datamod = JSON.parse(json);
+        var json_model = this.model.get('_model_data');
+        var json_header = this.model.get('_model_header');
+    
+        // Get the model's JSON string, and parse it. 
+        var datamod = JSON.parse(json_model);
+        var headermod = JSON.parse(json_header);
 
         // Give it to the Handsontable widget.
-        this.$table.handsontable({data: datamod});
-            
+        this.$table.handsontable({
+            data: datamod,
+            colHeaders: headermod
+        });
+    
         // Don't touch this...
         return SciSheetTableView.__super__.update.apply(this);
-    },
-        
+    },  
+    
     // Tell Backbone to listen to the change event of input controls.
   
-    events: {"change": "handle_table_change"}      
+    events: {"change": "handle_table_change"},    
 
     handle_table_change: function(event) {
         // JS --> PYTHON UPDATE.
@@ -59,14 +75,16 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         var ht = this.$table.handsontable('getInstance');
 
         // Get the data and serialize it
-        var json_vals = JSON.stringify(ht.getData());            
+        var json_vals = JSON.stringify(ht.getData());    
+        var col_vals = JSON.stringify(ht.getColHeader());
 
         // Update the model with the JSON string.
         this.model.set('_model_data', json_vals);
-            
+        this.model.set('_model_header', col_vals);
+    
         // Don't touch this...
         this.touch();
-    },
+    },  
 
 });
 
