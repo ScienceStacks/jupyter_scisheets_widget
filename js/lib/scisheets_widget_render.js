@@ -31,7 +31,9 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         // Get the model's JSON string and parse it
         var datamod = JSON.parse(json);
         // Create the Handsontable table.
-        this.$table.handsontable({data: datamod
+        this.$table.handsontable({
+            data: datamod["data"],
+            colHeaders: datamod["columns"]
         });
             
     },
