@@ -27,8 +27,12 @@ class SciSheetTable(widgets.DOMWidget):
     def load_df(self, df):
         if type(df) == pd.core.frame.DataFrame:
             model_data = df.to_json(orient='split')
+            #import pdb; pdb.set_trace();
+            print(model_data)
             model_data = ast.literal_eval(model_data)
+            print(model_data)
             self._model_data = json.dumps(model_data)
+            print(self._model_data)
             #self._model_data = json.dumps(model_data['data'])
             #self._model_header = json.dumps(model_data['columns']) 
             #self._model_row_header = json.dumps(model_data['index']) 
@@ -54,8 +58,11 @@ class HandsonDataFrame(object):
         if type(self._df) == pd.core.frame.DataFrame:
             print('on displayed')
             model_data = self._df.to_json(orient='split')
+            print(model_data)
             model_data = ast.literal_eval(model_data)
+            print(model_data)
             self._widget._model_data = json.dumps(model_data)
+            print(self._widget._model_data)
             #self._widget._model_data = json.dumps(model_data['data'])
             #self._widget._model_header = json.dumps(model_data['columns']) 
             #self._widget._model_row_header = json.dumps(model_data['index']) 

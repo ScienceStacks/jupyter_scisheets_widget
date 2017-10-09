@@ -78,7 +78,7 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         console.log(data_vals);
         console.log(col_vals);
         
-        var ht_data = JSON.stringify(ht.getSourceData());
+        var ht_data = JSON.stringify(ht.getSourceDataArray());
         console.log(ht_data); 
 
         var dict= {
@@ -88,13 +88,13 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         var dict1={};
         dict1['"data"'] = data_vals;
         dict1['"columns"'] = col_vals;
-        //console.log(dict);
-        //console.log(dict1);
-        //console.log(JSON.stringify(dict));
-        //console.log(JSON.stringify(dict1));
+        console.log(dict);
+        console.log(dict1);
+        console.log(JSON.stringify(dict));
+        console.log(JSON.stringify(dict1));
         //this.model.set('_model_header', JSON.stringify(dict1));
-        //this.model.set('_model_data', JSON.stringify(dict1));
-        this.model.set('_model_data', ht_data);    
+        this.model.set('_model_data', JSON.stringify(dict1));
+        //this.model.set('_model_data', ht_data);    
 
         // Don't touch this...
         this.touch();
