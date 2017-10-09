@@ -16,7 +16,7 @@ class SciSheetTable(widgets.DOMWidget):
     _view_module = Unicode('jupyter_scisheets_widget').tag(sync=True)
     _model_module = Unicode('jupyter_scisheets_widget').tag(sync=True)
     _model_data = Unicode('Welcome!').tag(sync=True)
-    #_model_header = Unicode().tag(sync=True)
+    _model_header = Unicode().tag(sync=True)
     #_model_row_header = Unicode().tag(sync=True)
 
 
@@ -67,12 +67,13 @@ class HandsonDataFrame(object):
         # changes a value in the graphical widget)
         print('data is being changed')
         print(self._widget._model_data)
+        self._widget._model_header = self._widget._model_data    
         #data_dic = {}
         #data_dic['columns'] = ast.literal_eval(self._widget._model_header)
         #data_dic['index'] = ast.literal_eval(self._widget._model_row_header)
         #data_dic['data'] = ast_literal_eval(self._widget._model_data)
-        data_dic = ast.literal_eval(self._widget._model_data)
-        self._df = pd.read_json(json.dumps(data_dic), orient='split')
+        #data_dic = ast.literal_eval(self._widget._model_data)
+        #self._df = pd.read_json(json.dumps(data_dic), orient='split')
         #self._df = pd.read_json(json.dumps(data_dic), orient='split')
         
     def to_dataframe(self):
