@@ -43,7 +43,10 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         // Create the Handsontable table.
         this.$table.handsontable({
             data: cell_data_mod,
-            colHeaders: header_data_mod
+            colHeaders: header_data_mod,
+            columnSorting: true,
+            manualColumnResize: true,
+            sortIndicator: true
         }); 
 
     },
@@ -66,7 +69,10 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         // Give the parsed data to the Handsontable widget
         this.$table.handsontable({
             data: cell_data_mod,
-            colHeaders: header_data_mod
+            colHeaders: header_data_mod,
+            columnSorting: true,
+            manualColumnResize: true,
+            sortIndicator: true
             //rowHeaders: rowheadermod
         });
     
