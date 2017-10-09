@@ -22,46 +22,42 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
     render: function(){
         // CREATION OF THE WIDGET IN THE NOTEBOOK.
 
+        // Add a <div> in the widget area.
         this.$table = $('<div />')
             .attr('id', 'table_' + (table_id++))
             .appendTo(this.$el);
+
         // Get the model's value (JSON);
-        var json = this.model.get('_model_data');
+        var json_model = this.model.get('_model_data');
+        var json_header = this.model.get('_model_header');
+
         // Get the model's JSON string and parse it
-        var datamod = JSON.parse(json);
+        var datamod = JSON.parse(json_model);
+        var headermod = JSON.parse(json_header);
+
         // Create the Handsontable table.
         this.$table.handsontable({
-            data: datamod["data"],
-            colHeaders: datamod["columns"]
-        }); 
-
+            data: datamod,
+            colHeaders: headermod
+        });
+            
     },
 
     update: function() {
         // PYTHON --> JS UPDATE.
     
         // Get the model's value (JSON)
-        var json_model = this.model.get('_model_data')
-        //var json_model = this.model.get('_model_data');
-        //var json_header = this.model.get('_model_header');
-        //var json_row_header = this.model.get('_model_row_header');
-   
-        //console.log(json_row_header);
- 
+        var json_model = this.model.get('_model_data');
+        var json_header = this.model.get('_model_header');
+    
         // Get the model's JSON string, and parse it. 
         var datamod = JSON.parse(json_model);
-        //var headermod = JSON.parse(json_header);
-        //var rowheadermod = JSON.parse(json_row_header);
-
-        //console.log(headermod);
-        //console.log(rowheadmod);
+        var headermod = JSON.parse(json_header);
 
         // Give it to the Handsontable widget.
         this.$table.handsontable({
-            data: datamod["data"],
-            colHeaders: datamod["columns"]
-            //colHeaders: headermod,
-            //rowHeaders: rowheadermod
+            data: datamod,
+            colHeaders: headermod
         });
     
         // Don't touch this...
@@ -81,33 +77,10 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         // Get the data and serialize it
         var json_vals = JSON.stringify(ht.getData());    
         var col_vals = JSON.stringify(ht.getColHeader());
-        console.log(json_vals);
-        console.log(col_vals);
-        //var row_vals = JSON.stringify(ht.getRowHeader());
 
-        var dict= {};
-        dict["data"] = json_vals;
-        dict["columns"] = col_vals;
-        var dict1= {};
-        dict1['data'] = json_vals;
-        dict1['columns'] = col_vals;
         // Update the model with the JSON string.
-        //var dict = [];
-        //dict.push({
-        //    key: "data",
-        //    value: json_vals
-        //});
-        //dict.push({
-        //    key: "columns",
-        //    value: col_vals
-        //});
-        console.log(dict1);
-        console.log(JSON.stringify(dict1));
-        console.log(dict);
-        console.log(JSON.stringify(dict));
-        this.model.set('_model_data', JSON.stringify(dict1));
-        //this.model.set('_model_header', col_vals);
-        //this.model.set('_model_row_header', row_vals);
+        this.model.set('_model_data', json_vals);
+        this.model.set('_model_header', col_vals);
     
         // Don't touch this...
         this.touch();

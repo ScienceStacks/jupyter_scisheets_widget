@@ -15,8 +15,9 @@ class SciSheetTable(widgets.DOMWidget):
     _model_name = Unicode('SciSheetTableModel').tag(sync=True)
     _view_module = Unicode('jupyter_scisheets_widget').tag(sync=True)
     _model_module = Unicode('jupyter_scisheets_widget').tag(sync=True)
-    _model_data = Unicode().tag(sync=True)
-    _model_header = Unicode().tag(sync=True)
+    _model_data = Unicode('Welcome!').tag(sync=True)
+    #_model_header = Unicode().tag(sync=True)
+    #_model_row_header = Unicode().tag(sync=True)
 
 
     @default('layout')
@@ -27,8 +28,10 @@ class SciSheetTable(widgets.DOMWidget):
         if type(df) == pd.core.frame.DataFrame:
             model_data = df.to_json(orient='split')
             model_data = ast.literal_eval(model_data)
-            self._model_data = json.dumps(model_data['data'])
-            self._model_header = json.dumps(model_data['columns'])  
+            self._model_data = json.dumps(model_data)
+            #self._model_data = json.dumps(model_data['data'])
+            #self._model_header = json.dumps(model_data['columns']) 
+            #self._model_row_header = json.dumps(model_data['index']) 
         else:
             print('Please enter a pandas dataframe')
 
@@ -38,34 +41,39 @@ class SciSheetTable(widgets.DOMWidget):
         else:
             print('Please enter a list')
 
-    def set_data(self, initial_data):
-        self._model_data = initial_data
-        # check if initial_data is a list
-        #if type(initial_data) == list:
-        #    self._model_data = json.dumps(initial_data)
-        # check if initial_data is a pandas dataframe
-        #elif type(initial_data) == pd.core.frame.DataFrame:
-        #    self._model_data = initial_data.to_json(orient='records')
-        #else:
-        #    print('Please enter a list or dataframe')
 
 class HandsonDataFrame(object):
     def __init__(self, df):
         self._df = df
         self._widget = SciSheetTable()
+        self._on_displayed(self)
         self._widget.observe(self._on_data_changed, '_model_data')
         self._widget.unobserve(self._on_displayed)
 
     def _on_displayed(self, e):
-        # DataFrame ==> Widget (upon initialization only)
-        json = self._df.to_json(orient='values')
-        self._widget.value = json
-        
-    def _on_data_changed(self, e, val):
+        if type(self._df) == pd.core.frame.DataFrame:
+            print('on displayed')
+            model_data = self._df.to_json(orient='split')
+            model_data = ast.literal_eval(model_data)
+            self._widget._model_data = json.dumps(model_data)
+            #self._widget._model_data = json.dumps(model_data['data'])
+            #self._widget._model_header = json.dumps(model_data['columns']) 
+            #self._widget._model_row_header = json.dumps(model_data['index']) 
+        else:
+            print('Please enter a pandas dataframe')
+
+    def _on_data_changed(self, e):
         # Widget ==> DataFrame (called every time the user
         # changes a value in the graphical widget)
-        buf = StringIO.StringIO(val)
-        self._df = pd.read_json(buf, orient='values')
+        print('data is being changed')
+        print(self._widget._model_data)
+        #data_dic = {}
+        #data_dic['columns'] = ast.literal_eval(self._widget._model_header)
+        #data_dic['index'] = ast.literal_eval(self._widget._model_row_header)
+        #data_dic['data'] = ast_literal_eval(self._widget._model_data)
+        data_dic = ast.literal_eval(self._widget._model_data)
+        self._df = pd.read_json(json.dumps(data_dic), orient='split')
+        #self._df = pd.read_json(json.dumps(data_dic), orient='split')
         
     def to_dataframe(self):
         return self._df
