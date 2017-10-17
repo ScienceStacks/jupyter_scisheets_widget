@@ -10,16 +10,22 @@ from traitlets import default
 from traitlets import List
 
 class SciSheetTable(widgets.DOMWidget):
-
+    # Name of the view in JS 
     _view_name = Unicode('SciSheetTableView').tag(sync=True)
+    # Name of the model in JS
     _model_name = Unicode('SciSheetTableModel').tag(sync=True)
+    # Namespace for the view (name of JS package)
     _view_module = Unicode('jupyter_scisheets_widget').tag(sync=True)
+    # Namespace for the module (name of JS package)
     _model_module = Unicode('jupyter_scisheets_widget').tag(sync=True)
+    # Defines the data (contents of cells) 
     _model_data = Unicode().tag(sync=True)
+    # Defines the header information
     _model_header = Unicode().tag(sync=True)
+    # Defines the index information
     _model_index = Unicode().tag(sync=True)
 
-
+    # Set the default layout
     @default('layout')
     def _default_layout(self):
         return widgets.Layout(height='400px', align_self='stretch')
@@ -34,6 +40,9 @@ class HandsonDataFrame(object):
         self._widget.unobserve(self._on_displayed)
 
     def _on_displayed(self, e):
+        """
+        Converts DataFrame to json and defines self._widget values
+        """
         if type(self._df) == pd.core.frame.DataFrame:
             model_data = self._df.to_json(orient='split')
             model_data = ast.literal_eval(model_data)
@@ -44,8 +53,10 @@ class HandsonDataFrame(object):
             print('Please enter a pandas dataframe')
 
     def _on_data_changed(self, e):
-        # Widget ==> DataFrame (called every time the user
-        # changes a value in the graphical widget)
+        """ 
+        Pulls data from the handsontable whenever the user changes a value
+        in the table 
+        """ 
         print('data is being changed')
         data_dict = ast.literal_eval(self._widget._model_data)
         col_dict = ast.literal_eval(self._widget._model_header)
@@ -57,7 +68,13 @@ class HandsonDataFrame(object):
         self._df.update(updated_df)        
 
     def to_dataframe(self):
+        """ 
+        Update the original DataFrame
+        """ 
         return self._df
         
     def show(self):
+        """ 
+        Display the widget
+        """          
         display(self._widget)

@@ -7,11 +7,24 @@ import Handsontable from 'handsontable/dist/handsontable.full.js';
 // Create the model
 var SciSheetTableModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend(_.result(this, 'widgets.DOMWidgetModel.prototype.defaults'), {
+        // Name of the model in JS
         _model_name : 'SciSheetTableModel',
+
+        // Name of the view is JS, frontend
         _view_name : 'SciSheetTableView',
+
+        // Namespace for the module (name of JS package)
         _model_module : 'jupyter_scisheets_widget',
+
+        // Namespace for the view (name of JS package), frontend
         _view_module : 'jupyter_scisheets_widget',
+
+        // A semver requirement for the namespace version 
+        //containing the module
         _model_module_version : '0.1.0',
+
+        // A semver requirement for the namespace version 
+        //containing the view, frontend
         _view_module_version : '0.1.0'
     })
 });
@@ -54,7 +67,7 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
     update: function() {
         // PYTHON --> JS UPDATE.
 
-        console.log('update function is running');
+        console.log('Update function is running');
 
         // Get the model's values (JSON);
         var cell_data = this.model.get('_model_data');
@@ -86,7 +99,7 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
 
     handle_table_change: function(event) {
         // JS --> PYTHON UPDATE.
-        console.log('now events is running');
+        console.log('handle_table_change is running');
 
         // Get table instance
         var ht = this.$table.handsontable('getInstance');

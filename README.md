@@ -13,11 +13,12 @@ ______________________________________________________
 Installation
 ------------
 
+[comment]: # (
 To install use pip:
 
     $ pip install jupyter_scisheets_widget
     $ jupyter nbextension enable --py --sys-prefix jupyter_scisheets_widget
-
+)
 
 For a development installation (requires npm),
 
@@ -26,3 +27,15 @@ For a development installation (requires npm),
     $ pip install -e .
     $ jupyter nbextension install --py --symlink --sys-prefix jupyter_scisheets_widget
     $ jupyter nbextension enable --py --sys-prefix jupyter_scisheets_widget
+
+If changes are made to the code, you can reinstall the widget using:
+    $ jupyter nbextension uninstall --py --sys-prefix jupyter_scisheets_widget
+    $ rm -rf jupyter_scisheets_widget/static/
+    $ python setup.py build
+    $ pip install -e .
+    $ jupyter nbextension install --py --symlink --sys-prefix jupyter_scisheets_widget
+    $ jupyter nbextension enable --py --sys-prefix jupyter_scisheets_widget
+
+You can alternatively run:
+    $ bash build_widget.sh
+                                                                    
