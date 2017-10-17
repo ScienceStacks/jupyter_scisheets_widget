@@ -12,6 +12,28 @@ ______________________________________________________
 
 Installation
 ------------
+# Create environment
+    $ conda create -n scisheets-widget-env python=2.7 notebook numpy pandas nb_conda
+
+# Mac/Linux:
+    $ source activate scisheets-widget-env
+
+# Windows:
+    $ activate scisheets-widget-env
+
+# Install other packages
+    $ conda install -c conda-forge ipywidgets nodejs
+
+# Installing jupyter_scisheets_widget
+    $ python setup.py build
+    $ pip install -e .
+
+    $ jupyter nbextension install —py —symlink —sys-prefix jupyter_scisheets_widget
+    $ jupyter nbextension enable —py —sys-prefix jupyter_scisheets_widget
+
+# To remove environment
+    $ conda env remove --name scisheets-widget-env
+
 
 [comment]: # (
 To install use pip:
@@ -21,14 +43,13 @@ To install use pip:
 )
 
 For a development installation (requires npm),
-
     $ git clone https://github.com/ScienceStacks/jupyter_scisheets_widget.git
     $ cd jupyter_scisheets_widget
     $ pip install -e .
     $ jupyter nbextension install --py --symlink --sys-prefix jupyter_scisheets_widget
     $ jupyter nbextension enable --py --sys-prefix jupyter_scisheets_widget
 
-If changes are made to the code, you can reinstall the widget using:
+If changes are made to the code, you can reinstall the widget using:   
     $ jupyter nbextension uninstall --py --sys-prefix jupyter_scisheets_widget
     $ rm -rf jupyter_scisheets_widget/static/
     $ python setup.py build
@@ -37,5 +58,4 @@ If changes are made to the code, you can reinstall the widget using:
     $ jupyter nbextension enable --py --sys-prefix jupyter_scisheets_widget
 
 You can alternatively run:
-    $ bash build_widget.sh
-                                                                    
+    $ bash build_widget.sh                                                                    
