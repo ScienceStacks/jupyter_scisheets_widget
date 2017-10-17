@@ -51,6 +51,7 @@ To install use pip:
 
 
 For a development installation (requires npm),
+
     $ git clone https://github.com/ScienceStacks/jupyter_scisheets_widget.git
     $ cd jupyter_scisheets_widget
     $ pip install -e .
@@ -58,6 +59,7 @@ For a development installation (requires npm),
     $ jupyter nbextension enable --py --sys-prefix jupyter_scisheets_widget
 
 If changes are made to the code, you can reinstall the widget using:   
+
     $ jupyter nbextension uninstall --py --sys-prefix jupyter_scisheets_widget
     $ rm -rf jupyter_scisheets_widget/static/
     $ python setup.py build
@@ -66,4 +68,5 @@ If changes are made to the code, you can reinstall the widget using:
     $ jupyter nbextension enable --py --sys-prefix jupyter_scisheets_widget
 
 You can alternatively run:
+
     $ bash build_widget.sh                                                                    
