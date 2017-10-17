@@ -151,7 +151,7 @@ setup_args = {
 
     'author': 'Alicia Clark',
     'author_email': '',
-    'url': 'https://github.com/clarka34/jupyter_scisheets_widget',
+    'url': 'https://github.com/ScienceStacks/jupyter_scisheets_widget',
     'keywords': [
         'ipython',
         'jupyter',
