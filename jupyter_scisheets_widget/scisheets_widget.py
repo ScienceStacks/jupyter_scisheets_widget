@@ -30,8 +30,9 @@ class SciSheetTable(widgets.DOMWidget):
 
 
 class HandsonDataFrame(object):
-    def __init__(self, df):
+    def __init__(self, df, onchange = None):
         self._df = df
+        self._onchange = onchange
         self._widget = SciSheetTable()
         self._on_displayed(self)
         self._widget.observe(self._on_data_changed, '_model_data')
@@ -51,7 +52,7 @@ class HandsonDataFrame(object):
             print('Please enter a pandas dataframe')
 
     def _on_data_changed(self, e):
-        """ 
+        """
         Pulls data from the handsontable whenever the user changes a value
         in the table
         """
@@ -60,9 +61,13 @@ class HandsonDataFrame(object):
         index_dict = json.loads(self._widget._model_index)
         updated_df = pd.DataFrame(data=data_dict, index=index_dict,
                                   columns=col_dict)
-        # Note this will have to be more robust if new rows and/or
-        # columns are added to the widget
-        self._df.update(updated_df)        
+
+        if self._onchange:
+            self._onchange(updated_df)
+        else:
+            # Note this will have to be more robust if new rows and/or
+            # columns are added to the widget
+            self._df.update(updated_df)
 
     def to_dataframe(self):
         """ 
