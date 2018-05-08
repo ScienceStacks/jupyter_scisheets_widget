@@ -1,6 +1,4 @@
-import ast
 import json
-import StringIO
 import ipywidgets as widgets
 import numpy as np
 import pandas as pd
@@ -32,8 +30,9 @@ class SciSheetTable(widgets.DOMWidget):
 
 
 class HandsonDataFrame(object):
-    def __init__(self, df):
+    def __init__(self, df, onchange = None):
         self._df = df
+        self._onchange = onchange
         self._widget = SciSheetTable()
         self._on_displayed(self)
         self._widget.observe(self._on_data_changed, '_model_data')
@@ -45,27 +44,30 @@ class HandsonDataFrame(object):
         """
         if type(self._df) == pd.core.frame.DataFrame:
             model_data = self._df.to_json(orient='split')
-            model_data = ast.literal_eval(model_data)
+            model_data = json.loads(model_data)
             self._widget._model_data = json.dumps(model_data['data'])
-            self._widget._model_header = json.dumps(model_data['columns']) 
-            self._widget._model_index = json.dumps(model_data['index']) 
+            self._widget._model_header = json.dumps(model_data['columns'])
+            self._widget._model_index = json.dumps(model_data['index'])
         else:
             print('Please enter a pandas dataframe')
 
     def _on_data_changed(self, e):
-        """ 
+        """
         Pulls data from the handsontable whenever the user changes a value
-        in the table 
-        """ 
-        print('data is being changed')
-        data_dict = ast.literal_eval(self._widget._model_data)
-        col_dict = ast.literal_eval(self._widget._model_header)
-        index_dict = ast.literal_eval(self._widget._model_index)
-        updated_df = pd.DataFrame(data=data_dict, index=index_dict, 
+        in the table
+        """
+        data_dict = json.loads(self._widget._model_data)
+        col_dict = json.loads(self._widget._model_header)
+        index_dict = json.loads(self._widget._model_index)
+        updated_df = pd.DataFrame(data=data_dict, index=index_dict,
                                   columns=col_dict)
-        # Note this will have to be more robust if new rows and/or
-        # columns are added to the widget
-        self._df.update(updated_df)        
+
+        if self._onchange:
+            self._onchange(updated_df)
+        else:
+            # Note this will have to be more robust if new rows and/or
+            # columns are added to the widget
+            self._df.update(updated_df)
 
     def to_dataframe(self):
         """ 
