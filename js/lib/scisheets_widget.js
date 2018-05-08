@@ -54,14 +54,20 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         var index_data_mod = JSON.parse(index_data);  
 
         // Create the Handsontable table.
+        var _this = this;
         this.$table.handsontable({
             data: cell_data_mod,
             colHeaders: header_data_mod,
             columnSorting: true,
             manualColumnResize: true,
-            sortIndicator: true
-        }); 
-
+            sortIndicator: true,
+            afterChange: function (changes, source) {
+                console.log('AfterChange');
+                if (source != 'loadData') {
+                    _this.handle_table_change();
+                }
+            },
+        });
     },
 
     update: function() {
@@ -80,22 +86,24 @@ var SciSheetTableView = widgets.DOMWidgetView.extend({
         var index_data_mod = JSON.parse(index_data);  
    
         // Give the parsed data to the Handsontable widget
+        var _this = this;
         this.$table.handsontable({
             data: cell_data_mod,
             colHeaders: header_data_mod,
             columnSorting: true,
             manualColumnResize: true,
-            sortIndicator: true
-            //rowHeaders: rowheadermod
+            sortIndicator: true,
+            afterChange: function (changes, source) {
+                console.log('AfterChange');
+                if (source != 'loadData') {
+                    _this.handle_table_change();
+                }
+            },
         });
     
         // Don't touch this...
         return SciSheetTableView.__super__.update.apply(this);
     },  
-    
-    // Tell Backbone to listen to the change event of input controls.
-  
-    events: {"change": "handle_table_change"},    
 
     handle_table_change: function(event) {
         // JS --> PYTHON UPDATE.
